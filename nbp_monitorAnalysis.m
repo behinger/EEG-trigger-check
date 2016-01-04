@@ -7,17 +7,19 @@ addpath('e:\')
 % EEG = pop_loadeep('e:\20150925_1608.cnt','triggerfile','on');
 % EEG = pop_loadeep('e:\whiteBasis2.cnt','triggerfile','on');
 %  EEG = pop_loadeep('e:\triggerCheckerLong.cnt','triggerfile','on');
- EEG = pop_loadeep('e:\led_test.cnt','triggerfile','off');
- EEG = pop_loadeep('e:\luminancev2_2.cnt','triggerfile','on');
+%  EEG = pop_loadeep('e:\led_test.cnt','triggerfile','off');
+%  EEG = pop_loadeep('e:\luminancev2_2.cnt','triggerfile','on');
+ EEG = pop_loadeep('e:\grayvalues.cnt','triggerfile','on');
 EEG.data = EEG.data - mean(EEG.data); % remove crazy dc offset
 
-EEG.data = detrend(EEG.data);
+% EEG.data = detrend(EEG.data);
 
 %% 50 Hz
 figure,pwelch(EEG.data,[],[],[],2048)
 % --> lets filter
 
-%EEG = pop_eegfiltnew(EEG,48,52,[],1,0,1);
+EEG = pop_eegfiltnew(EEG,46,54,[],1,0,1);
+% EEG = pop_eegfiltnew(EEG,640,660,[],1,0,1);
 pwelch(EEG.data(1,200000:end),[],[],[],2048)
 %%
 EEG2 = pop_epoch( EEG, {'10'}, [-0.05         0.05], 'newname', 'epochs', 'epochinfo', 'yes');
@@ -51,3 +53,26 @@ sd = squeeze(std(EEG2.data,[],3));
 
 plot(EEG2.times,squeeze(EEG2.data),'Color',colorlist(ev/10,:))
 end
+
+%%
+m = [];
+sd = [];
+dat = [];
+for k=1:length(EEG.event);EEG.event(k).type = deblank(EEG.event(k).type);end
+for ev = [1:128];%[40 50]
+EEG2 = pop_epoch( EEG, {num2str(ev)}, [0,0.05], 'newname', 'epochs', 'epochinfo', 'yes');
+EEG2.data = EEG2.data(:,:,1:7);
+m(ev) = mean(EEG2.data(:));
+sd(ev) = std(EEG2.data(:));
+dat(ev,:) = EEG2.data(:);
+% EEG2 = pop_rmbase( EEG2, [-0.5   0]);
+% m = squeeze(mean(EEG2.data,3));
+% sd = squeeze(std(EEG2.data,[],3));
+% shadedErrorBar(EEG2.times,m,sd,[],1)
+
+% plot(EEG2.times,squeeze(EEG2.data),'Color',colorlist(ev/10,:))
+end
+%%
+figure,errorbar(mean(dat(2:end,1:102),2),range(dat(2:end,1:102)'))
+set(gca,'XTick',[0,32,128])
+set(gca,'XtickLabel',{'Black','64/255','White'})
