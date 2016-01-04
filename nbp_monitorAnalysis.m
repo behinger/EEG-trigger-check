@@ -1,15 +1,16 @@
 % EEG = pop_fileio('/net/store/nbp/EEG/blind_spot/data/monitorSpeedCheck/benq120Hz/120hz gabor.cnt');
 addpath('c:\users\behinger\Dropbox\phD\opto\scripts\toolbox\eeglab_git\')
-eeglab rebuild
-addpath('e:\anteepimport1.10\')
-addpath('e:\')
+addpath(genpath('~/Documents/MATLAB/eeglab_dev/'))
+%eeglab rebuild
+addpath('/net/store/nbp/projects/lib/anteepimport1.09/')
+
 % EEG = pop_select( EEG,'channel',{'IMAGEN'});
-% EEG = pop_loadeep('e:\20150925_1608.cnt','triggerfile','on');
-% EEG = pop_loadeep('e:\whiteBasis2.cnt','triggerfile','on');
-%  EEG = pop_loadeep('e:\triggerCheckerLong.cnt','triggerfile','on');
-%  EEG = pop_loadeep('e:\led_test.cnt','triggerfile','off');
-%  EEG = pop_loadeep('e:\luminancev2_2.cnt','triggerfile','on');
- EEG = pop_loadeep('e:\grayvalues.cnt','triggerfile','on');
+% EEG = pop_loadeep('20150925_1608.cnt','triggerfile','on');
+% EEG = pop_loadeep('whiteBasis2.cnt','triggerfile','on');
+  EEG = pop_loadeep('triggerCheckerLong.cnt','triggerfile','on');
+%  EEG = pop_loadeep('led_test.cnt','triggerfile','off');
+%  EEG = pop_loadeep('luminancev2_2.cnt','triggerfile','on');
+%EEG = pop_loadeep('grayvalues.cnt','triggerfile','on');
 EEG.data = EEG.data - mean(EEG.data); % remove crazy dc offset
 
 % EEG.data = detrend(EEG.data);
@@ -22,15 +23,17 @@ EEG = pop_eegfiltnew(EEG,46,54,[],1,0,1);
 % EEG = pop_eegfiltnew(EEG,640,660,[],1,0,1);
 pwelch(EEG.data(1,200000:end),[],[],[],2048)
 %%
-EEG2 = pop_epoch( EEG, {'10'}, [-0.05         0.05], 'newname', 'epochs', 'epochinfo', 'yes');
+EEG2 = pop_epoch( EEG, {'40'}, [-0.05         0.05], 'newname', 'epochs', 'epochinfo', 'yes');
 
 EEG2 = pop_rmbase( EEG2, [-50   0]);
 
 % EEG = pop_eegfiltnew(EEG, 10, [])
 % EEG = pop_select( EEG,'notrial',[1:200] );
-
+figure
+plot(EEG2.times,mean(EEG2.data,3)),vline(0)
 % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname','EPOCHS','gui','off'); 
 % eeglab redraw
+
 %%
 figure; pop_erpimage(EEG2,1, [1],[[]],'IMAGEN',1,1,{},[],'' ,'yerplabel','\muV','erp','on','limits',[NaN NaN NaN NaN NaN NaN NaN NaN],'cbar','on','topo', { [1] EEG.chanlocs EEG.chaninfo } );
 
