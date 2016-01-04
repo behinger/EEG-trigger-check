@@ -25,5 +25,5 @@ Here we added a small resistor, greatly enhancing our signal to noise. Black is 
  
 
 ## Example
-For an example we run the triggerCheckerLong and plot the delay as here:
+For an example we run the luminancev2_2 and plot the delay as here:
 ![White to Black Luminance Sensor output](/figures/luminancev2_2.cnt_white2black.png?raw=true "")
