@@ -1,16 +1,24 @@
 % EEG = pop_fileio('/net/store/nbp/EEG/blind_spot/data/monitorSpeedCheck/benq120Hz/120hz gabor.cnt');
-addpath('c:\users\behinger\Dropbox\phD\opto\scripts\toolbox\eeglab_git\')
-addpath(genpath('~/Documents/MATLAB/eeglab_dev/'))
-%eeglab rebuild
-addpath('/net/store/nbp/projects/lib/anteepimport1.09/')
+if ispc
+    p.eeglab = genpath('c:\users\behinger\Dropbox\phD\opto\scripts\toolbox\eeglab_git\');
+    p.anteepimport = 'anteepimport1.10';
+else
+    p.eeglab = genpath('~/Documents/MATLAB/eeglab_dev/');
+    p.anteepimport = '/net/store/nbp/projects/lib/anteepimport1.09/';
+end
+addpath(p.eeglab)
 
+%eeglab rebuild
+addpath(p.anteepimport)
+addpath('data')
+addpath('lib')
 % EEG = pop_select( EEG,'channel',{'IMAGEN'});
-% EEG = pop_loadeep('20150925_1608.cnt','triggerfile','on');
-% EEG = pop_loadeep('whiteBasis2.cnt','triggerfile','on');
-  EEG = pop_loadeep('triggerCheckerLong.cnt','triggerfile','on');
-%  EEG = pop_loadeep('led_test.cnt','triggerfile','off');
-%  EEG = pop_loadeep('luminancev2_2.cnt','triggerfile','on');
-%EEG = pop_loadeep('grayvalues.cnt','triggerfile','on');
+% EEG = pop_loadeep('data/20150925_1608.cnt','triggerfile','on');
+% EEG = pop_loadeep('data/whiteBasis2.cnt','triggerfile','on');
+  EEG = pop_loadeep('data/triggerCheckerLong.cnt','triggerfile','on');
+%  EEG = pop_loadeep('data/led_test.cnt','triggerfile','off');
+%  EEG = pop_loadeep('data/luminancev2_2.cnt','triggerfile','on');
+%EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
 EEG.data = EEG.data - mean(EEG.data); % remove crazy dc offset
 
 % EEG.data = detrend(EEG.data);
@@ -29,11 +37,20 @@ EEG2 = pop_rmbase( EEG2, [-50   0]);
 
 % EEG = pop_eegfiltnew(EEG, 10, [])
 % EEG = pop_select( EEG,'notrial',[1:200] );
+mDat = mean(EEG2.data,3);
 figure
-plot(EEG2.times,mean(EEG2.data,3)),vline(0)
+
+hold all
+x = plot(EEG2.times,squeeze(EEG2.data));
+for i =1:length(x)
+x(i).Color(4) = 0.1;
+end
+vline(EEG2.times(find(mDat>45,1,'first')))
+plot(EEG2.times,mDat,'b','LineWidth',2),vline(0)
+title(['white2black: ',num2str(EEG2.times(find(mDat>45,1,'first'))),' ms'])
 % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname','EPOCHS','gui','off'); 
 % eeglab redraw
-
+print('figures/triggerCheckerLong_white2black.png')
 %%
 figure; pop_erpimage(EEG2,1, [1],[[]],'IMAGEN',1,1,{},[],'' ,'yerplabel','\muV','erp','on','limits',[NaN NaN NaN NaN NaN NaN NaN NaN],'cbar','on','topo', { [1] EEG.chanlocs EEG.chaninfo } );
 
