@@ -12,12 +12,18 @@ addpath(p.eeglab)
 addpath(p.anteepimport)
 addpath('data')
 addpath('lib')
+dataset = 'grayvalues'
+dataset = 'luminancev2_2.cnt';
+%dataset = 'triggerCheckerLong.cnt';
+%dataset = 'whiteBasis2.cnt';
+%dataset = 'led_test.cnt'
+%dataset = '20150925_1608.cnt';
 % EEG = pop_select( EEG,'channel',{'IMAGEN'});
 % EEG = pop_loadeep('data/20150925_1608.cnt','triggerfile','on');
 % EEG = pop_loadeep('data/whiteBasis2.cnt','triggerfile','on');
-  EEG = pop_loadeep('data/triggerCheckerLong.cnt','triggerfile','on');
+  %EEG = pop_loadeep('data/triggerCheckerLong.cnt','triggerfile','on');
 %  EEG = pop_loadeep('data/led_test.cnt','triggerfile','off');
-%  EEG = pop_loadeep('data/luminancev2_2.cnt','triggerfile','on');
+  EEG = pop_loadeep(['data/',dataset],'triggerfile','on');
 %EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
 EEG.data = EEG.data - mean(EEG.data); % remove crazy dc offset
 
@@ -38,6 +44,7 @@ EEG2 = pop_rmbase( EEG2, [-50   0]);
 % EEG = pop_eegfiltnew(EEG, 10, [])
 % EEG = pop_select( EEG,'notrial',[1:200] );
 mDat = mean(EEG2.data,3);
+thresh = find(mDat<-90000,1,'first');
 figure
 
 hold all
@@ -45,12 +52,12 @@ x = plot(EEG2.times,squeeze(EEG2.data));
 for i =1:length(x)
 x(i).Color(4) = 0.1;
 end
-vline(EEG2.times(find(mDat>45,1,'first')))
+vline(EEG2.times(thresh))
 plot(EEG2.times,mDat,'b','LineWidth',2),vline(0)
-title(['white2black: ',num2str(EEG2.times(find(mDat>45,1,'first'))),' ms'])
+title(['white2black: ',num2str(EEG2.times(thresh)),' ms'])
 % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname','EPOCHS','gui','off'); 
 % eeglab redraw
-print('figures/triggerCheckerLong_white2black.png')
+print(sprintf('figures/%s_white2black.png',dataset),'-dpng')
 %%
 figure; pop_erpimage(EEG2,1, [1],[[]],'IMAGEN',1,1,{},[],'' ,'yerplabel','\muV','erp','on','limits',[NaN NaN NaN NaN NaN NaN NaN NaN],'cbar','on','topo', { [1] EEG.chanlocs EEG.chaninfo } );
 
