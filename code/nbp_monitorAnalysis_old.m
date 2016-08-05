@@ -1,19 +1,21 @@
 % EEG = pop_fileio('/net/store/nbp/EEG/blind_spot/data/monitorSpeedCheck/benq120Hz/120hz gabor.cnt');
 if ispc
-    p.eeglab = genpath('c:\users\behinger\Dropbox\phD\opto\scripts\toolbox\eeglab_git\');
+    cd c:\Users\behinger\cloud\PhD\triggerScripts\EEG-trigger-check\
+    p.eeglab = genpath('C:\Users\behinger\cloud\PhD\deconvolution\lib\eeglab');
     p.anteepimport = 'anteepimport1.10';
 else
     p.eeglab = genpath('~/Documents/MATLAB/eeglab_dev/');
     p.anteepimport = '/net/store/nbp/projects/lib/anteepimport1.09/';
 end
 addpath(p.eeglab)
-
+eeglab
 %eeglab rebuild
 addpath(p.anteepimport)
 addpath('data')
 addpath('lib')
 dataset = 'grayvalues'
 dataset = 'luminancev2_2.cnt';
+dataset = 'benq120hz_prc5to95_twodiodes.cnt'
 %dataset = 'triggerCheckerLong.cnt';
 %dataset = 'whiteBasis2.cnt';
 %dataset = 'led_test.cnt'
@@ -25,8 +27,10 @@ dataset = 'luminancev2_2.cnt';
 %  EEG = pop_loadeep('data/led_test.cnt','triggerfile','off');
   EEG = pop_loadeep(['data/',dataset],'triggerfile','on');
 %EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
-EEG.data = EEG.data - mean(EEG.data); % remove crazy dc offset
-
+%EEG.data = bsxfun(@minus,EEG.data,mean(EEG.data,2)); % remove crazy dc offset
+for e = 1:length(EEG.event)
+    EEG.event(e).type = deblank(EEG.event(e).type);
+end
 % EEG.data = detrend(EEG.data);
 
 %% 50 Hz
@@ -37,8 +41,8 @@ EEG = pop_eegfiltnew(EEG,46,54,[],1,0,1);
 % EEG = pop_eegfiltnew(EEG,640,660,[],1,0,1);
 pwelch(EEG.data(1,200000:end),[],[],[],2048)
 %%
-EEG2 = pop_epoch( EEG, {'40'}, [-0.05         0.05], 'newname', 'epochs', 'epochinfo', 'yes');
-
+EEG2 = pop_epoch( EEG, {'95'}, [-0.05         0.05], 'newname', 'epochs', 'epochinfo', 'yes');
+EEG2 = eeg_checkset(EEG2);
 EEG2 = pop_rmbase( EEG2, [-50   0]);
 
 % EEG = pop_eegfiltnew(EEG, 10, [])
