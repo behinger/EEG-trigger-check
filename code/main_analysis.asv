@@ -1,4 +1,8 @@
 %EEG = pop_fileio('/net/store/nbp/EEG/blind_spot/data/monitorSpeedCheck/benq120Hz/120hz gabor.cnt');
+
+
+
+%-----choose between windows and linux-----
 if ispc
     p.eeglab = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\eeglab13_6_5b';
     p.anteepimport = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\lib\anteepimport1.10';
@@ -13,16 +17,28 @@ else
 end
 addpath(p.eeglab)
 
-eeglab rebuild
+%eeglab rebuild
 addpath(p.anteepimport)
 addpath('lib')
 %dataset = '/home/experiment/lcdlum/EEG-trigger-check/Test run/rand/20160802_1450.cnt'
 
-eventstr = '100'
 
+
+%------------------YOU HAVE TO ENTER THE FOLLOWING PARAMETERS--------------
+
+
+
+%-----names of triggers-----
+eventstrcell = {'1','100'};
+
+%-----threshold: fix or variable?
+thres = [];
+
+
+%-----choose the monitordata-----
 monitor = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets/rand.set'
 
-%monitor1 = 
+%monitor1 = C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets
 %monitor2 =
 %monitor3 = 
 %monitor4 =
@@ -30,7 +46,10 @@ monitor = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\e
 
 
 
-[raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstr);
+
+
+%-------------------Execution----------------------
+[raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstrcell,thres);
 
 
 

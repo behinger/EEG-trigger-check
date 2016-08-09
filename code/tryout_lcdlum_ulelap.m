@@ -1,9 +1,9 @@
-function [raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstrcell)
+function [raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstrcell,thres)
 
 
 EEG = pop_loadset(monitor);
 % EEG = pop_loadset('C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets\benq120hz.set');
-% EEG.data(3,:) = EEG.data(2,:);
+ EEG.data(3,:) = EEG.data(2,:);  %%-----if the channels are not 1 and 2 but 1 and 3, this line changes the channel 3 to channel 2
 %EEG = pop_loadset('/home/experiment/lcdlum/eeg_data/benq120hz.set');
 %EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
 
@@ -12,13 +12,13 @@ EEG = pop_loadset(monitor);
 %-----parting of EEG Data into epochs------
 
 for e = 1:length(EEG.event)
-    EEG.event(e).type = deblank(EEG.event(e).type);
+    EEG.event(e).type = deblank(EEG.event(e).type);    %nimmt komisches zeichen aus EEG.event raus
 end
 
 
-for eventstridx = eventstrcell
+for eventstridx = eventstrcell   
     eventstr = eventstridx{1};
-    [raise_time_list1, reaction_time_list1,raise_time_list2, reaction_time_list2, EEG2] = set_epoch(EEG,eventstr);  %set_epoch is also normalizing
+    [raise_time_list1, reaction_time_list1,raise_time_list2, reaction_time_list2, EEG2] = set_epoch_2(EEG,eventstr,thres);  %set_epoch is also normalizing
     
     
     
@@ -44,7 +44,7 @@ for eventstridx = eventstrcell
         y(i).Color(4) = 0.1;
     end
     
-    title('white-black-white-switch')
+    title(['white-black-white-switch' eventstr])
     xlabel('epoch')
     ylabel('voltage')
     
@@ -109,13 +109,15 @@ for eventstridx = eventstrcell
     
     
     %%
-    fprintf('Trigger:%s \n',eventstr)
-    fprintf('raise-time\n')
+    fprintf('\n')
+    fprintf('-----Trigger:%s----- \n',eventstr)
+    fprintf('Raise-time\n')
     fprintf('Sensor 1: %.1f (%.1f,%.1f) \n',raise_time_mean1,raise_time_quantile1)
     fprintf('Sensor 2: %.1f (%.1f,%.1f) \n',raise_time_mean2,raise_time_quantile2)
-    
-    fprintf('reaction-time\n')
+    fprintf('\n')
+    fprintf('Reaction-time\n')
     fprintf('Sensor 1: %.1f (%.1f,%.1f) \n',reaction_mean1,reaction_time_quantile1)
     fprintf('Sensor 2: %.1f (%.1f,%.1f) \n',reaction_mean2,reaction_time_quantile2)
+    fprintf('\n')
     
 end
