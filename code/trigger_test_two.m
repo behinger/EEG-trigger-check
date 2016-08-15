@@ -27,7 +27,7 @@ cfg.background = 0;
 cfg.fillRect = []; %the whole screen is used
 % cfg.fillRect = [51 51 52 52;scr_w-51 scr_h-51 scr_w-50 scr_h-50]; %one pixel left top one pixel right bottom
 %cfg.fillRect = [scr_w-50,scr_h-50, scr_w,scr_h]; %only a small part for the diode is used
-cfg.stepcolor = [0 128 255 0 255 128;10 20 30 40 50 60]; % default , colors with übergängen nad triggernames
+cfg.stepcolor = [0 128 255 0 255 128;10 20 30 40 50 60]; % default , colors with Ã¼bergÃ¤ngen nad triggernames
 % cfg.stepcolor = [13 242;5,95]; % default
 % cfg.stepcolor = [0 255 50 255 100 255 150 255 200 255 225 255;1 10 50 11 100 12 150 13 200 14 225 15]; % intoTheWild Conditions
 
@@ -68,7 +68,7 @@ constant = [colors ; trigName_before] %matrix with colornames and triggernames a
 for color = constant
                 Screen('FillRect', win , color(1) ,cfg.fillRect' ); 
                 
-                triggerNum = color(2); %hier triggername bzw trigName noch anpassen ändern!!!!!!!
+                triggerNum = color(2); %hier triggername bzw trigName noch anpassen Ã¤ndern!!!!!!!
                 Screen('Flip', win);
                 
                 if USE_EYETRACKING
