@@ -1,0 +1,123 @@
+function [raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstrcell,thres)
+
+
+EEG = pop_loadset(monitor);
+% EEG = pop_loadset('C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets\benq120hz.set');
+ EEG.data(3,:) = EEG.data(2,:);  %%-----if the channels are not 1 and 2 but 1 and 3, this line changes the channel 3 to channel 2
+%EEG = pop_loadset('/home/experiment/lcdlum/eeg_data/benq120hz.set');
+%EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
+
+%eeglab redraw
+%%
+%-----parting of EEG Data into epochs------
+
+for e = 1:length(EEG.event)
+    EEG.event(e).type = deblank(EEG.event(e).type);    %%%nimmt kom
+end
+
+
+for eventstridx = eventstrcell
+    eventstr = eventstridx{1};
+    [raise_time_list1, reaction_time_list1,raise_time_list2, reaction_time_list2, EEG2] = set_epoch_2(EEG,eventstr,thres);  %set_epoch is also normalizing
+    
+    
+    
+    %EEG2 = pop_epoch( EEG, {'100'}, [0    0.09], 'newname', 'epochs', 'epochinfo', 'yes');
+    
+    %%
+    %-----plotting normalized data-----
+    
+    %----normalize Data-----
+    [x_norm, y_norm] = normalize(EEG2.data);
+    
+    
+    figure, hold all
+    
+    x = plot(EEG2.times,squeeze(x_norm),'r');
+    y = plot(EEG2.times,squeeze(y_norm),'g');
+    
+    %transparency
+    for i = 1:length(x)
+        x(i).Color(4) = 0.1;
+    end
+    for i = 1:length(y)
+        y(i).Color(4) = 0.1;
+    end
+    
+    title(['white-black-white-switch' eventstr])
+    xlabel('epoch')
+    ylabel('voltage')
+    
+    
+    
+    % plotting means of data-channels
+    mDat_x = mean(squeeze(x_norm),2);
+    mDat_y = mean(squeeze(y_norm),2);
+    
+    
+    plot(EEG2.times,mDat_x,'b')
+    plot(EEG2.times,mDat_y,'b')
+    
+    
+    
+    % title + label
+    title('white-black-white-switch')
+    xlabel('time')
+    ylabel('voltage')
+    
+    
+    %%
+    %-----raise_time, reaction_time, response_time-----
+    
+    
+    % parameter are already produced in set_epoch-function
+    response_time_list1 = raise_time_list1 + reaction_time_list1;
+    response_time_list2 = raise_time_list2 + reaction_time_list2;
+    
+    raise_time_mean1 = mean(raise_time_list1);
+    raise_time_mean2 = mean(raise_time_list2);
+    
+    reaction_mean1 = mean(reaction_time_list1);
+    reaction_mean2 = mean(reaction_time_list2);
+    
+    response_time1_mean = mean(response_time_list1);
+    response_time2_mean = mean(response_time_list2);
+    
+    %%
+    %-----delay for response, reaction and raise time-----
+    
+    delay_response_list = response_time_list1 - response_time_list2;
+    delay_reaction_list = reaction_time_list1 - reaction_time_list2;
+    delay_raise_list = raise_time_list1 - raise_time_list2;
+    
+    delay_response_mean = mean(delay_response_list);
+    delay_reaction_mean = mean(delay_reaction_list);
+    delay_raise_mean = mean(delay_raise_list);
+    
+    %%
+    %-----quantiles of raise-time, reaction-time, response-time------
+    
+    %quantiles raise-time
+    raise_time_quantile1 = quantile(raise_time_list1,[0.05 0.95]);
+    raise_time_quantile2 = quantile(raise_time_list2,[0.05 0.95]);
+    %quantiles reaction-time
+    reaction_time_quantile1 = quantile(reaction_time_list1,[0.05 0.95]);
+    reaction_time_quantile2 = quantile(reaction_time_list2, [0.05 0.95]);
+    %quantiles response-time
+    response_time_quantile1 = quantile(response_time_list1,[0.05 0.95]);
+    response_time_quantile2 = quantile(response_time_list2,[0.05 0.95]);
+    
+    
+    %%
+    fprintf('\n')
+    fprintf('-----Trigger:%s----- \n',eventstr)
+    fprintf('Raise-time\n')
+    fprintf('Sensor 1: %.1f (%.1f,%.1f) \n',raise_time_mean1,raise_time_quantile1)
+    fprintf('Sensor 2: %.1f (%.1f,%.1f) \n',raise_time_mean2,raise_time_quantile2)
+    fprintf('\n')
+    fprintf('Reaction-time\n')
+    fprintf('Sensor 1: %.1f (%.1f,%.1f) \n',reaction_mean1,reaction_time_quantile1)
+    fprintf('Sensor 2: %.1f (%.1f,%.1f) \n',reaction_mean2,reaction_time_quantile2)
+    fprintf('\n')
+    
+end
