@@ -2,7 +2,7 @@ function [raise_time_list1, reaction_time_list1,raise_time_list2, reaction_time_
 
 %eeglab-function for producing epochs
 EEG2 = pop_epoch( EEG, {eventstr}, [-0.05    0.15], 'newname', 'epochs', 'epochinfo', 'yes');
-
+EEG2 = eeg_checkset(EEG2);
 %----normalize Data-----
 [x_norm, y_norm] = normalize(EEG2.data);
 
@@ -30,7 +30,7 @@ else
 %     end
 %     
 %     origin = EEG2.data(1,my_list_origin,:) %???????????
-%     my_thres_origin = % mean über y-werte aus my_list_origin
+%     my_thres_origin = % mean ï¿½ber y-werte aus my_list_origin
 %     
 %     my_list_target = nan(1,size(data,3));
 %     for ep = 1:size(data,3)
@@ -44,7 +44,7 @@ else
 %     end
 %     
 %     target = EEG2.data(1,my_list_target,:) %????????????
-%     my_thres_target = % mean über y-werte aus my_list_target
+%     my_thres_target = % mean ï¿½ber y-werte aus my_list_target
 %     
 %     if strcmp(eventstr,'100')
 %         thresTarget = my_thres_target;

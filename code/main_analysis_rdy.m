@@ -8,7 +8,7 @@ if ispc                                                             % for window
     p.anteepimport = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\lib\anteepimport1.10';
 else
     cd /net/store/nbp/projects/lcdlum/                              % for linux
-    p.eeglab = '/net/store/nbp/projects/lcdlum/lib/eeglab';
+    p.eeglab = '/net/store/nbp/projects/lcdlum/eeglab';
     p.anteepimport = '/net/store/nbp/projects/lib/anteepimport1.09/';
 end
 addpath(p.eeglab)
@@ -25,7 +25,7 @@ addpath('lib')
 
 
 %-----names of triggers-----
-eventstrcell = {'1','100'};
+eventstrcell = {'5','95'};
 
 %-----threshold: fix or variable?
 thres = 'nonfix';
@@ -35,9 +35,9 @@ thres = 'nonfix';
 % monitor = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabset\rand.set'
 % monitor = 'C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets\benq120hz.set'
 
-monitor = '/net/store/nbp/projects/lcdlum/data/eeglabsets/rand.set'
-% monitor = '/net/store/nbp/projects/lcdlum/data/eeglabsets/benq120hz.set'
-%monitor4 =
+% monitor = '/net/store/nbp/projects/lcdlum/EEG-trigger-check-master/data/eeglabsets/rand.set'
+% monitor = '/net/store/nbp/projects/lcdlum/EEG-trigger-check-master/data/eeglabsets/benq120hz.set'
+monitor = '/net/store/nbp/projects/lcdlum/EEG-trigger-check-master/data/generalCheck
 %monitor5 =
 
 

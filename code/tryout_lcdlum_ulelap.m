@@ -1,12 +1,12 @@
 function [raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor,eventstrcell,thres)
 
 
-EEG = pop_loadset(monitor);
+% EEG = pop_loadset(monitor);
 % EEG = pop_loadset('C:\Users\Ule\Desktop\Programmier-Kram\EEG-trigger-check-master\data\eeglabsets\benq120hz.set');
- EEG.data(3,:) = EEG.data(2,:);  %%-----if the channels are not 1 and 2 but 1 and 3, this line changes the channel 3 to channel 2
+   %%-----if the channels are not 1 and 2 but 1 and 3, this line changes the channel 3 to channel 2
 %EEG = pop_loadset('/home/experiment/lcdlum/eeg_data/benq120hz.set');
-%EEG = pop_loadeep('data/grayvalues.cnt','triggerfile','on');
-
+EEG = pop_loadeep(monitor,'triggerfile','on');
+EEG.data(3,:) = EEG.data(2,:);
 %eeglab redraw
 %%
 %-----parting of EEG Data into epochs------
@@ -46,7 +46,7 @@ for eventstridx = eventstrcell
     
     title(['white-black-white-switch' eventstr])
     xlabel('epoch')
-    ylabel('voltage')
+    ylabel('candela')
     
     
     
