@@ -56,7 +56,7 @@ Screen('Flip', win);
 
 %%
 %-----runing every color BEFORE flipping colors-----
-cfg.stepcolor = [0 128 255 0 255 128;10 20 30 40 50 60];
+
 
 
 colors = unique(cfg.stepcolor(1,:)); % list with colors

@@ -18,6 +18,9 @@ if strcmp(thres,'fix')
     thresOrigin_y = thresOrigin;
     thresTarget_y = thresTarget;
 else
+    
+%-----thresholds bei gradient-----
+
 %     my_list_origin = nan(1,size(data,3));
 %     for ep = 1:size(data,3)
 %         for k = 1:size(data,2)

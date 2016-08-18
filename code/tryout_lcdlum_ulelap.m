@@ -6,7 +6,7 @@ function [raise_time_mean1, raise_time_quantile1] = tryout_lcdlum_ulelap(monitor
    %%-----if the channels are not 1 and 2 but 1 and 3, this line changes the channel 3 to channel 2
 %EEG = pop_loadset('/home/experiment/lcdlum/eeg_data/benq120hz.set');
 EEG = pop_loadeep(monitor,'triggerfile','on');
-EEG.data(3,:) = EEG.data(2,:);
+
 %eeglab redraw
 %%
 %-----parting of EEG Data into epochs------
@@ -22,7 +22,7 @@ for eventstridx = eventstrcell
     
     
     
-    %EEG2 = pop_epoch( EEG, {'100'}, [0    0.09], 'newname', 'epochs', 'epochinfo', 'yes');
+    %EEG2 = pop_epoch( EEG, {'100'}, [-0.05    0.15], 'newname', 'epochs', 'epochinfo', 'yes');
     
     %%
     %-----plotting normalized data-----
@@ -44,12 +44,50 @@ for eventstridx = eventstrcell
         y(i).Color(4) = 0.1;
     end
     
-    title(['white-black-white-switch' eventstr])
-    xlabel('epoch')
-    ylabel('candela')
+    % title + label
+    if strcmp(eventstridx,'10');
+        swit = 'gray2black';
+    elseif strcmp(eventstridx,'20');
+        swit = 'black2gray';
+    elseif strcmp(eventstridx,'30');
+        swit = 'gray2white';
+    elseif strcmp(eventstridx,'40');
+        swit = 'white2black';
+    elseif strcmp(eventstridx,'50');
+        swit = 'black2white';
+    elseif strcmp(eventstridx,'60');
+        swit = 'white2gray';
+    elseif strcmp(eventstridx,'101');
+        swit = 'before long white2black';
+    elseif strcmp(eventstridx,'102');
+        swit = 'before long black2gray';
+    elseif strcmp(eventstridx,'103');
+        swit = 'before long gray2white';
+     elseif strcmp(eventstridx,'201');
+        swit = 'after long black';
+    elseif strcmp(eventstridx,'202');
+        swit = 'after long gray';
+    elseif strcmp(eventstridx,'203');
+        swit = 'after long white';
+    elseif strcmp(eventstridx,'66');
+        swit = 'fast flipping white2black'
+    elseif strcmp(eventstridx,'67');
+        swit = 'fast flippin black2white'    
+    else
+        swit = ''
+    end
+        
+    title(['Switch', eventstridx, swit])
+    xlabel('time')
+    ylabel('voltage')
     
-    
-    
+    % 10 --> g2b
+    % 20 --> b2g
+    % 30 --> g2w
+    % 40 --> w2b
+    % 50 --> b2w
+    % 60 --> w2g
+               
     % plotting means of data-channels
     mDat_x = mean(squeeze(x_norm),2);
     mDat_y = mean(squeeze(y_norm),2);
@@ -59,12 +97,7 @@ for eventstridx = eventstrcell
     plot(EEG2.times,mDat_y,'b')
     
     
-    
-    % title + label
-    title('white-black-white-switch')
-    xlabel('time')
-    ylabel('voltage')
-    
+ 
     
     %%
     %-----raise_time, reaction_time, response_time-----

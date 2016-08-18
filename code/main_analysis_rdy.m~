@@ -27,9 +27,9 @@ addpath('lib')
 
 
 %-----names of triggers-----
-eventstrcell = {'10','20','30','40','50','60','102','103','201','202','203','66','67'};%101 fehlt
+% eventstrcell = {'10','20','30','40','50','60','101','102','103','201','202','203','66','67'};
 % eventstrcell = {'1','2','3'};
-% eventstrcell = {'10','20','30','40','50','60'}
+eventstrecell
 
 %-----threshold: fix or variable?
 thres = 'nonfix';
@@ -41,7 +41,7 @@ thres = 'nonfix';
 
 % monitor = '/net/store/nbp/projects/lcdlum/EEG-trigger-check-master/data/eeglabsets/rand.set'
 % monitor = '/net/store/nbp/projects/lcdlum/EEG-trigger-check-master/data/eeglabsets/benq120hz.set'
-monitor = 'data/generalCheck/20160817_left_right.cnt'
+monitor = 'data/generalCheck/sensor4.cnt'
 %monitor5 =
 
 
