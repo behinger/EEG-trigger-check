@@ -1,13 +1,13 @@
 %% Open Screen
 % %
 USE_EYETRACKING = 0;
-USE_TRIGGER = 0;
+USE_TRIGGER = 1;
 
 
 
 if ~USE_EYETRACKING
     if USE_TRIGGER          %changed like this by bene
-        addpath('matlabtrigger')
+        
 
         ppdev_mex('CloseAll')
         ppdev_mex('Open',1)
@@ -17,7 +17,7 @@ whichScreen = max(Screen('Screens'));
 
 sca
 
-[win,winRect] = Screen('OpenWindow',0,0,[0,0,200,200]);
+[win,winRect] = Screen('OpenWindow',1,0);
 
 scr_w = winRect(3);
 scr_h = winRect(4);
@@ -109,7 +109,7 @@ switch cfg.method
             
         end
     case 'stepwise'
-        for k = 1:20
+        for k = 1:200
             %Show Straight
             %     Screen('SelectStereoDrawBuffer', win, 1);
             
