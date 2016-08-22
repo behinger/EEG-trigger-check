@@ -17,7 +17,7 @@ whichScreen = max(Screen('Screens'));
 
 sca
 
-[win,winRect] = Screen('OpenWindow',1,0);
+[win,winRect] = Screen('OpenWindow',0,0);
 
 scr_w = winRect(3);
 scr_h = winRect(4);
@@ -101,7 +101,7 @@ switch cfg.method
             
             if USE_EYETRACKING
                 Eyelink('command', '!*write_ioport 0x378 %d',mod(k,128)+1);
-                WaitSecs(0.01);    Eyelink('command', '!*write_ioport 0x378 %d',0);WaitSecs(0.01);
+exi                WaitSecs(0.01);    Eyelink('command', '!*write_ioport 0x378 %d',0);WaitSecs(0.01);
             elseif USE_TRIGGER
                 lptwrite(1,10)
             end
@@ -178,3 +178,10 @@ for k = 1:200
         end
     end
 end
+%%
+
+
+sca
+
+
+
