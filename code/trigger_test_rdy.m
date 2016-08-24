@@ -18,7 +18,7 @@ whichScreen = max(Screen('Screens'));
 sca
 
 [win,winRect] = Screen('OpenWindow',0,0);
-
+ 
 scr_w = winRect(3);
 scr_h = winRect(4);
 cfg = [];
