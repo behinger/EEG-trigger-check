@@ -11,22 +11,28 @@ end
 for ep = 1:size(data,3)
     ran = 0.025*range([thresOrigin(:,:,ep),thresTarget(:,:,ep)]);
     if thresOrigin(:,:,ep) > thresTarget(:,:,ep)
-        data_Origin = data(:,:,ep)< thresOrigin(:,:,ep) - ran;
+        thresh = thresOrigin(:,:,ep) - ran;
+        data_Origin = data(:,:,ep)< thresh;
+        data_Origin(1:find(data(:,:,ep)>thresh,1,'last'))=0;
     else
-        data_Origin = data(:,:,ep)> thresOrigin(:,:,ep) + ran;
+        thresh = thresOrigin(:,:,ep) + ran;
+        data_Origin = data(:,:,ep)> thresh;
+        data_Origin(1:find(data(:,:,ep)<thresh,1,'last'))=0;
     end
     
-    for k = 1:size(data,2)
-        if data_Origin(1,k) == 1
-            data_Origin(1,k) = 0;
-        else
-            break
-        end
-    end
+    
+%     for k = 1:size(data,2)
+%         if data_Origin(1,k) == 1
+%             data_Origin(1,k) = 0;
+%         else
+%             break
+%         end
+%     end
     if ~any(data_Origin(1,:))
         warning('At least in one epoch, I could not find a sample greater/lower than Threshold2')
         continue
     end
+    
     samples_Origin(ep) = find(data_Origin(1,:)&EEG_time>0,1,'first');
     
 end
@@ -38,7 +44,7 @@ samples_Target = nan(1,size(data,3));
 
 
 for ep = 1:size(data,3)
-    ran = 0.025*range([thresOrigin(:,:,ep),thresTarget(:,:,ep)]);
+    ran = .025*range([thresOrigin(:,:,ep),thresTarget(:,:,ep)]);
     
     if thresOrigin(:,:,ep) > thresTarget(:,:,ep)
         data_Target = data(:,:,ep)< thresTarget(:,:,ep) + ran; % black to white
@@ -46,13 +52,13 @@ for ep = 1:size(data,3)
         data_Target = data(:,:,ep)> thresTarget(:,:,ep) - ran; % white (origin) to black (target)
     end
     
-    for k = 1:size(data,2)
-        if data_Target(1,k) == 1
-            data_Target(1,k) = 0;
-        else
-            break
-        end
-    end
+%     for k = 1:size(data,2)
+%         if data_Target(1,k) == 1
+%             data_Target(1,k) = 0;
+%         else
+%             break
+%         end
+%     end
     if ~any(data_Target(1,:))
         warning('At least in one epoch, I could not find a sample greater/lower than Threshold1')
         continue
@@ -65,7 +71,8 @@ end
 nanidx = isnan(samples_Origin) | isnan(samples_Target);
 samples_Origin(nanidx) = [];
 samples_Target(nanidx) = [];
-
+%%
+% ep = 28
 % figure,
 % plot(EEG_time,data(:,:,ep))
 % vline(0)
@@ -76,13 +83,16 @@ samples_Target(nanidx) = [];
 % else
 %     hline(thresTarget(:,:,ep) - ran); % white (origin) to black (target)
 % end
-%
+% 
 % if thresOrigin(:,:,ep) > thresTarget(:,:,ep)
 %     hline(thresOrigin(:,:,ep) - ran);
 % else
 %     hline(thresOrigin(:,:,ep) + ran);
 % end
-%-----define output-----
+%%
+
+
+% -----define output-----
 if thresOrigin > thresTarget
     raise_time = EEG_time(samples_Target) - EEG_time(samples_Origin);
     reaction_time = EEG_time(samples_Origin);

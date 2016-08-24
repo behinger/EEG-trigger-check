@@ -159,13 +159,17 @@ for eventstridx = eventstrcell
     Sensor = [1;2];
     Raisetime = [raise_time_mean1; raise_time_mean2];
     Reactiontime = [reaction_mean1;reaction_mean2];
+    Responsetime = [response_time1_mean;response_time2_mean];
     RaiseQuantileLow = [raise_time_quantile1(1); raise_time_quantile2(1)];
     RaiseQuantileHigh = [raise_time_quantile1(2); raise_time_quantile2(2)];
     ReactionQuantileLow = [reaction_time_quantile1(1);reaction_time_quantile2(1)];
     ReactionQuantileHigh = [reaction_time_quantile1(2);reaction_time_quantile2(2)];
-   
+    ResponseQuantileLow = [response_time_quantile1(1);response_time_quantile2(1)];
+    ResponseQuantileHigh = [response_time_quantile1(2);response_time_quantile2(2)];
     
-    t_single = table(Monitors, Trigger, Sensor, Raisetime, RaiseQuantileLow, RaiseQuantileHigh, Reactiontime, ReactionQuantileLow, ReactionQuantileHigh);
+    t_single = table(Monitors, Trigger, Sensor, Raisetime, RaiseQuantileLow,...
+               RaiseQuantileHigh, Reactiontime, ReactionQuantileLow, ReactionQuantileHigh,...
+               Responsetime, ResponseQuantileLow, ResponseQuantileHigh);
     
 %     t_single_event = table([reaction_mean1,reaction_mean2]', ...
 %                            [reaction_time_quantile1(1),reaction_time_quantile2(1)]',...
