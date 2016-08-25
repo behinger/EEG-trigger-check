@@ -6,6 +6,7 @@ Even modern LCD monitors have an input lag (response time). In psychophyscial Ex
 
 ## Definitions
 There are three time-differences of interest.
+
 The *raise time* is the time the LCD-crystals needs to change from one luminance to another.
 
 The *reaction time* is the time between the computer-command to show an image and the moment in which the monitor begins to change the luminance.
