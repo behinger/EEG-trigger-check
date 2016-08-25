@@ -1,29 +1,30 @@
 # LCD Monitor Check
 
-## Aim
+## Introduction
 
-We tried to find out about the delays of LCD monitors during the presentation of stimuli. Therefore we checked different monitors of different brands on 60Hz, 120Hz and one on 144Hz. We hoped to find a more or less constant delay, so that it's possible to include this data in EEG-experiments. Furthermore we checked how long it will take to send a Trigger and get a response implemented by matlab.
-
-Finally we wanted to have a graph, on which you can see how much delay the used monitor will have.
+Even modern LCD monitors have an input lag (response time). In psychophyscial Experiments (especially EEG) it is important to ensure proper timing, thus we measured the total response time of various LCD monitors in our lab. We measured different Brands at different Refresh Rates up to 144Hz. In summary we find short delays for BenQ XL2420T and XL2430T.
 
 
-## Method
+## Methods
 
-First of all we wrote one script for the presentation of stimuli and one for analyzing the data. We measured with two luminance sensors, an ANT 64, presented from Matlab (Ubuntu generic) and recorded with ASA-lab (windows).
+Our presentation script can be found [here](./code/trigger_test_rdy.m). We measured with two custom-made luminance sensors and a TMSI Refa-8 amplifier at 2048Hz. Stimuli were presented using [PsychoToolbox](http://psychtoolbox.org/) under Ubuntu 14.
 
 #### Sensors
-LCD monitors are usually refreshing/updating the screen with 60Hz(so 60 times a second) from top to the buttom. That's why there is always a delay between the upper part of the screen and the lower part. To also check this delay we used to sensors, our sensor 1 is measuring the voltage in the upper left corner, sensor 2 the opposite.
+LCD monitors are usually refreshing the screen from top to the bottom. That's why there is a delay between the updating of the upper part of the screen and the lower part. To precisely quantify this delay we used two sensors, *Sensor 1* on the upper left corner, and *Sensor 2* on the lower right corner.
+Due to our sensor design, we have different dynamic ranges for each sensor and also each montage on the displays. Importantly, this does not influence the features we are interested in, as this represents only a linear scaling of the voltage but the time properties are still the same.
+
+Note: Depending on the back light technique, it is important to measure the monitors on the highest monitor brightness due to PWM, a technique that modulates the brigthness of the back light with a certain frequency (in our monitors ~185Hz). 
 
 #### Delays
-In fact we have three interesting time-differences.
-The "raise time" is the time a monitor needs to change from a color to an other.
-The "reaction time" is the time a monitor needs to react on the input. Thus it is the time between the trigger and the moment in which the monitor begins to change the color.
-The "response time" consists of the raise time and the response time, so it's the hole delay from the trigger until the color is switched.
+There are three time-differences of interest.
+The *raise time* is the time the LCD-crystals needs to change from one luminance to another.
+The *reaction time* is the time between the computer-command to show an image and the moment in which the monitor begins to change the luminance.
+The *response time* is the sum of the raise time and the response time, thus the full input lag.
 
-#### Measuring
-We decided to take black, gray and white as testing-colors. Thus we had six different color changes  (with one trigger for each): black-gray, black-white, gray-black, gray-white, white-black and white-gray. For each switch we had 400 trials. It was also important to measure the monitors on the highest brightness, because otherwise the back light starts to fluctuate which causes much bigger delays. In addition to the standard-flipping-presentation (with 150ms + random between the colors) we measured the "as-fast-as-possible-flipping".
-
-Unfortunately our Sensors were recognizing different voltages during presenting the same color and also the individual sensor was not constantly recognizing voltage, although it was the same color. Luckily this bug is not influencing the data we are interested in, because it doesn't matter which level of voltage it reaches, it's just important how much time it takes. Thus this brought no interpretation problems.
+#### Presentation 
+The LCD-crystals change their color with different speeds, depending on the current and future target color. Therefore, we used three colors: Black, White and Gray and pairwise switches (6 in total). We showed full-display stimuli for 150ms + uniform jitter of up to 25ms. A trigger marking the flip of the graphics card was send using a parallel port.
+After 400 trials for each switch, we additionally measured display luminances when changing from white to black and back at every frame.
+We used the synchronous setting from psychotoolbox, that means, the command waits for the flip-onset of the graphics card and is thereby synchronous to the vertical retrace of the monitor ([more details here](http://docs.psychtoolbox.org/Flip)).
 
 ##### Monitors
        | 60Hz | 120Hz | 144Hz
@@ -36,28 +37,23 @@ Benq144 |X|X|X
 
 
 ## Analysis
-In the analysis-script we began to epoch the data and used the time interval before and after the trigger to calculate the mean voltage of the "target color" and the "current/origin color". Sensor 1 is shown in red, sensor 2 in green. Trigger came at 0.
+For the analysis we first epoched the data. To detect the raisetime used 50ms before and 50ms - 100ms after the trigger to calculate the mean voltage of the "target color" and the "current/origin color". The difference between these two is the *raise time*. The first time is the *reaction time* and the second time the *response time*.
 
+![alttext](./doc/switch1.png)       
+
+This example here shows both sensors, one on the upper left, the other on the lower right corner. Notice the delay in *reaction time* that represents the vertical retrace of the monitor
 ![alttext](./doc/switchExample.png)       
 
-On the basis of this means, the thresholds were generated. One threshold represents the moment, where the color starts to change and the second one represents the moment, where the target color is reached.
+## Results
 
-![alttext](./doc/threshold.png)
-
-![alttext](./doc/switch.png)
-
-Actually we tried to normalize the data from the two sensors but because of some weird outcomes we rechecked the sensors, recognizing that they are not constantly working (however still not problematic).
-
-
-## Final Graph
-
-The following Graph shows six subplots separated into three plots for each sensor. Then its also separated into three rows: raise time, reaction time and response time at the buttom. The different colors are representing the switches as you can see on the right. In fact you can see for every monitor-condition how big the raise, reaction or response time is for a certain switch. Pay heed to the sensors! Again, sensor 1 is located at the upper left corner of the screen and sensor 2 at the right buttom. That is important for the interpretation of the differences in the feature reaction time.
-
+### Latencies
 ![SwitchExample](./doc/lcdlumFinal.png)
+Columns show the two sensors. Rows show *raise time*, *reaction time* and the summed *response time*. The different colors represent the switches between colors. Pay heed that the most conservative input measurement is represented by *sensor 2* (lower corner) in the *response time* column. I.e. for our fastest monitor we still have an input delay from flip-command at the computer to actual target luminance reached of ~14ms.
 
-## Trigger-Check
+### Trigger-Check
 
-On three computers we checked the parallel ports and the time they need until a response. This procedure was just to make sure that there are no significant delays of the trigger itself which manipulates the data of the monitors.
+On three (identically configured!) display computers we measured the delay of sending a trigger via the parallel port. We did this by setting a signal on one pin, having a hardware bridge to another pin and measuring the time until the voltage on the other pin was changed. We repeated this 200 times and noted the mean and maximal value.
+Note that under some non-replicable settings we found a single trigger with 3ms delay!
 
        | Mudddy | Ren | Stimpy
 -------|--------|-----|-------
