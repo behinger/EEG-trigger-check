@@ -44,7 +44,7 @@ On the basis of this means, the thresholds were generated. One threshold represe
 
 ![alttext](./doc/threshold.png)
 
-![alttext](./doc/switchfeddig.png)
+![alttext](./doc/switch.png)
 
 Actually we tried to normalize the data from the two sensors but because of some weird outcomes we rechecked the sensors, recognizing that they are not constantly working (however still not problematic).
 
