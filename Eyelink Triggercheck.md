@@ -42,7 +42,8 @@ Again we have three points in time:
 I uploaded the points as a 'b'-pickle [here](./data/200k_triggertest_pylink.pkl)
 
 
-
+Here is the same plot as above, but now with way more data and pylink directly instead of pygaze:
+![trigger pylink](./figures/pylink_overtime_170k.png)
 
 
 [The script can be found here](./code/pylink_triggertest.py)
