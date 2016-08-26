@@ -10,10 +10,10 @@ In both cases, for 2000 tested triggers, we observed the majority below 1ms.
 ### Results
 In pygaze <0.1% of triggers have a high delay (>10ms, up to 50ms). What is clear from those, that the delay is during the function call of *tracker.send_command*.
 
-Total time, function call & readout: Pylink in [ms]:
+Total time, function call & readout: **Pylink** in [ms]:
 ![pylink trigger test](./figures/pylink_hist.png)
 
-Total time, function call & readout: PyGaze in [ms]:
+Total time, function call & readout: **PyGaze** in [ms]:
 ![PyGaze trigger test](./figures/pygaze_hist.png)
 
 
