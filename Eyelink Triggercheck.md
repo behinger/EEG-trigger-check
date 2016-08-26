@@ -19,7 +19,8 @@ Total time, function call & readout: **PyGaze** in [ms]:
 
 In pygaze 2/20.000 (0.0001%) of triggers have a high delay (>10ms, up to 50ms(!)). 8/20.000 are higher than 2ms (0.0004%). Further checks showed, that the extereme delays of ~50ms are during the function call of *tracker.send_command*. 
 
-In all other cases (7 out of 8) it seems that the eyetracker is lagging. We did further testing using matlab and a photodiode, XXX/analysis todo.
+In all other cases (7 out of 8) it seems that the eyetracker is lagging. We did further testing using matlab and a photodiode, here the maximal delay (out of 1700 trials) was 8ms. based on a very stereotyped LCD response. This already hints to a python/pylink problem?
+
 
 ![PyGaze trigger test](./figures/pygaze_overtime.png)
 Green is the total time, red is the time after the send_command command returned but before the trigger arrived and blue is the negative time of only the send_command. It is clear, that some delays happen after python send the command to the eyetracker (red peaks) but the largest one is clearly the sending of the command.
