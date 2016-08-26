@@ -26,7 +26,7 @@ Green is the total time, red is the time after the send_command command returned
 
 ----
 Further tests:
-I let the script run for 200.000 triggers because I wanted to see whether the glitch occurs at precicely timed intervals (NTP clock drift update?). It does not seem to do.
+I let the script run for 200.000 triggers (ok its only 170.000 because I need to go home) because I wanted to see whether the glitch occurs at precicely timed intervals (NTP clock drift update?). It does not seem to do.
 Again we have three points in time:
 > A
 > send_command
