@@ -24,6 +24,23 @@ In all other cases (7 out of 8) it seems that the eyetracker is lagging. We did 
 ![PyGaze trigger test](./figures/pygaze_overtime.png)
 Green is the total time, red is the time after the send_command command returned but before the trigger arrived and blue is the negative time of only the send_command. It is clear, that some delays happen after python send the command to the eyetracker (red peaks) but the largest one is clearly the sending of the command.
 
+----
+Further tests:
+I let the script run for 200.000 triggers because I wanted to see whether the glitch occurs at precicely timed intervals (NTP clock drift update?). It does not seem to do.
+Again we have three points in time:
+> A
+> send_command
+> B
+> Wait_for_parallel
+> C
+A-B: The very big lags occur with A-B, i.e. the call of the eyelink library. They can be higher than 50ms, in one case even 1s! In most cases these are smaller 2ms, only in 0.001% cases they are higher.
+
+
+B-C: Here we observe that sometimes the eyetracker seems to show a delay, 0.0002%. These delays seem to cluster at 14ms and 2ms.
+
+I uploaded the points as a 'b'-pickle [here](./data/200k_triggertest_pylink.pkl)
+
+
 
 
 
