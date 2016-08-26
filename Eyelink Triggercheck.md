@@ -7,6 +7,7 @@ We conntected a parallelport cable from our stimulation pc to the eyelink-host. 
 We tested the *pylink* package from sr-research directly and the pygaze wrapper.
 In both cases, for 2000 tested triggers, we observed the majority below 1ms.
 
+### Results
 In pygaze <0.1% of triggers have a high delay (>10ms, up to 50ms). What is clear from those, that the delay is during the function call of *tracker.send_command*.
 
 Total time, function call & readout: Pylink in [ms]:
