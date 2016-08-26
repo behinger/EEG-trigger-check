@@ -10,7 +10,7 @@ import time
 import random
 import parallel
 import matplotlib.pyplot as plt
-PYGAZE = 1
+PYGAZE = 0
 
 
 if PYGAZE:
@@ -30,7 +30,7 @@ p.PPDATADIR(0) # listen at the local parallelport what the eyetracking port has 
 tlist1 = []
 tlist2 = []
 tlist3 = []
-for k in range(2000):
+for k in range(20000):
     randint = random.randint(1, 255)
     print('trial %i, sendingtrigger:%i'%(k,randint))
     
