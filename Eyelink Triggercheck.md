@@ -33,10 +33,11 @@ Again we have three points in time:
 > B
 > Wait_for_parallel
 > C
-A-B: The very big lags occur with A-B, i.e. the call of the eyelink library. They can be higher than 50ms, in one case even 1s! In most cases these are smaller 2ms, only in 0.001% cases they are higher.
+
+**Timepoint A minus Timepoint B**: The very big lags occur with A-B, i.e. the call of the eyelink library. They can be higher than 50ms, in one case even 1s! In most cases these are smaller 2ms, only in 0.001% cases they are higher.
 
 
-B-C: Here we observe that sometimes the eyetracker seems to show a delay, 0.0002%. These delays seem to cluster at 14ms and 2ms.
+**Timepoint B minus Timepoint C**: Here we observe that sometimes the eyetracker seems to show a delay, 0.0002%. These delays seem to cluster at 14ms and 2ms.
 
 I uploaded the points as a 'b'-pickle [here](./data/200k_triggertest_pylink.pkl)
 
